@@ -2,10 +2,12 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser');
-
 const app = express();
+const cors = require('cors')
 require("dotenv/config")
 
+app.use(cors())
+app.options('*', cors( ))
 
 // middleware
 app.use(bodyParser.json());
