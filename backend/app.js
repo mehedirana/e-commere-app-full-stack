@@ -12,12 +12,19 @@ app.use(bodyParser.json());
 app.use(morgan('tiny'));
 
 //Routers
-const productsRouter = require('./routers/products')
+const productsRoutes = require('./routers/products');
+const categoriesRoutes = require('./routers/categories');
+const usersRoutes = require('./routers/users');
+const orderRoutes = require('./routers/orders');
+
 
 
 const api = process.env.API_URL;
 
-app.use(`${api}/products`,productsRouter)
+app.use(`${api}/products`,productsRoutes);
+app.use(`${api}/categories`,categoriesRoutes);
+app.use(`${api}/users`,usersRoutes);
+app.use(`${api}/orders`,orderRoutes);
 
 
 mongoose.connect(process.env.CONNECTION_STRING,{ 
