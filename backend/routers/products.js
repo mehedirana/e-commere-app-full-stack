@@ -9,14 +9,11 @@ router.get(`/`, async (req,res)=>{
     if(!productList){
         res.status(500).json({success: false})
     }
-    res.send(productList)
+    res.send({productList, success: true})
 })
 router.post(`/`,(req,res)=>{
 
     const product = new Product({
-    //    name: req.body.name,
-    //    image: req.body.image,
-    //    countInStock: req.body.countInStock,
     name: req.body.name,
     description: req.body.description,
     richDescription: req.body.richDescription,
@@ -32,7 +29,7 @@ router.post(`/`,(req,res)=>{
     dateCreated: req.body.dateCreated
     })
     product.save().then((createdProduct=>{
-        res.status(201).json(createdProduct)
+        res.status(201).json({createdProduct, success: true})
     })).catch((err)=> {
         res.status(500).json({
             error:err,
