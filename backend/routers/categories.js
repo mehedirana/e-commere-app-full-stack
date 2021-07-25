@@ -67,7 +67,7 @@ router.put('/:id', async (req, res) => {
         name: req.body.name,
         icon: req.body.icon,
         color: req.body.color
-    }).then(category => {
+    },{new: true}).then(category => {
         if (category) {
            return  res.status(200).json({category, success: true })
         }
