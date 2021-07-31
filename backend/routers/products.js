@@ -1,6 +1,5 @@
 const Product = require('../models/product')
 const express = require('express');
-// const category = require('../models/category');
 const Category = require('../models/category');
 const router = express.Router()
 
@@ -42,21 +41,18 @@ router.post(`/`, async (req, res) => {
         description: req.body.description,
         richDescription: req.body.richDescription,
         image: req.body.image,
-        // images: req.body.images,
         brand: req.body.brand,
         price: req.body.price,
         category: req.body.category,
         countInStock: req.body.countInStock,
         rating: req.body.rating,
         numReviews: req.body.numReviews,
-        // isFeatured: req.body.isFeatured,
-        // dateCreated: req.body.dateCreated
     })
 
     product = await product.save();
 
     if (!product) {
-        return res.status(500).json({ error: 'product can be created', success: false })
+        return res.status(500).json({ error: 'product can not be created', success: false })
     }
 
     return res.send(product)
@@ -72,17 +68,18 @@ router.post(`/`, async (req, res) => {
 
 // update a product
 
-router.put('/:id', async (res, req) => {
+router.put('/:id', async (req, res) => {
+
     try {
         const category = await Category.findById(req.body.category)
         if (!category) return res.status(400).send('Invalid Category');
-        
+
+
         const product = await Product.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             description: req.body.description,
             richDescription: req.body.richDescription,
             image: req.body.image,
-            // images: req.body.images,
             brand: req.body.brand,
             price: req.body.price,
             category: req.body.category,
@@ -93,7 +90,7 @@ router.put('/:id', async (res, req) => {
         }, { new: true })
 
         if (product) return res.status(200).json({ product, success: true })
-        else return res.status(404).json({ success: false, message: 'Product not found!' })
+        else return res.status(500).json({ success: false, message: 'Product not found!' })
 
     } catch (error) {
         return res.status(400).json({ success: false, error: error })
