@@ -86,6 +86,7 @@ router.put('/:id', async (req, res) => {
             countInStock: req.body.countInStock,
             rating: req.body.rating,
             numReviews: req.body.numReviews,
+            isFeatured: req.body.isFeatured
 
         }, { new: true })
 
@@ -137,7 +138,7 @@ router.get('/get/feature', async (req,res)=>{
         const getIsFeatured = await Product.find({isFeatured: true});
 
         if(getIsFeatured) return res.status(200).json({success: true, products: getIsFeatured})
-        else return res.status(404).json({success: false, message: 'Product not found!' });
+        else return res.status(404).json({success: false, message: 'Feature product not found!' });
     } catch (error) {
        return res.status(400).json({success: false, error: error})
     }
