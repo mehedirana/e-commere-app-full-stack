@@ -5,7 +5,12 @@ const router = express.Router()
 
 // get all product
 router.get(`/`, async (req, res) => {
-    const productList = await Product.find().populate('category');
+    let filter ={};
+
+    if(req.query.categories){
+        filter = {category: req.query.categories.split(',')}
+    }
+    const productList = await Product.find(filter).populate('category');
 
     if (!productList) {
         res.status(500).json({ success: false })
@@ -133,9 +138,10 @@ router.get('/get/count', async (req, res)=>{
 
 // get feature products
 
-router.get('/get/feature', async (req,res)=>{
+router.get('/get/feature/:count', async (req,res)=>{
     try {
-        const getIsFeatured = await Product.find({isFeatured: true});
+        const count = req.params.count ? req.params.count : 0
+        const getIsFeatured = await Product.find({isFeatured: true}).limit(+count)
 
         if(getIsFeatured) return res.status(200).json({success: true, products: getIsFeatured})
         else return res.status(404).json({success: false, message: 'Feature product not found!' });
