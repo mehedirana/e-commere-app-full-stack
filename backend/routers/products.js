@@ -130,4 +130,17 @@ router.get('/get/count', async (req, res)=>{
 
 })
 
+// get feature products
+
+router.get('/get/feature', async (req,res)=>{
+    try {
+        const getIsFeatured = await Product.find({isFeatured: true});
+
+        if(getIsFeatured) return res.status(200).json({success: true, products: getIsFeatured})
+        else return res.status(404).json({success: false, message: 'Product not found!' });
+    } catch (error) {
+       return res.status(400).json({success: false, error: error})
+    }
+})
+
 module.exports = router;
