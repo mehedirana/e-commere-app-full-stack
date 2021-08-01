@@ -13,7 +13,7 @@ router.get('/', async (req,res)=>{
 
 router.post('/', async (req, res)=>{
 
-    const user = new User({
+    let user = new User({
         name: req.body.name,
         email: req.body.email,
         passwordHash: req.body.passwordHash,
