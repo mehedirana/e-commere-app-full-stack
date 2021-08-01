@@ -12,6 +12,23 @@ router.get('/', async (req,res)=>{
     res.send(userList)
 })
 
+//for single user
+
+router.get('/:id', async (req, res) => {
+  
+
+    User.findById(req.params.id).then(user => {
+        if (category) {
+            return res.status(200).json({ success: true, user })
+        }
+        else {
+            return res.status(404).json({ success: false, message: 'The user was not found!' })
+        }
+    }).catch(err => {
+        return res.status(400).json({ success: false, error: err })
+    })
+})
+
 router.post('/', async (req, res)=>{
 
     let user = new User({
@@ -37,5 +54,7 @@ router.post('/', async (req, res)=>{
         return res.status(400).json({success: false, error})
     }
 })
+
+
 
 module.exports = router;

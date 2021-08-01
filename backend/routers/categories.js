@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
 })
 
-
+// for single category
 router.get('/:id', async (req, res) => {
     // const category = await Category.findById(req.params.id);
 
