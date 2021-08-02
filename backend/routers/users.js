@@ -18,7 +18,7 @@ router.get('/:id', async (req, res) => {
   
 
     User.findById(req.params.id).then(user => {
-        if (category) {
+        if (user) {
             return res.status(200).json({ success: true, user })
         }
         else {
@@ -55,6 +55,15 @@ router.post('/', async (req, res)=>{
     }
 })
 
+// user log in
+
+router.post('/login', async (req, res)=>{
+    const user = await User.findOne({email: req.body.email})
+
+    if(!user) return res.status(400).json({success: false, message:'The user not found'});
+    else return res.status(200).json({success: true, user})
+ 
+})
 
 
 module.exports = router;
