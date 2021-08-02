@@ -58,11 +58,17 @@ router.post('/', async (req, res)=>{
 // user log in
 
 router.post('/login', async (req, res)=>{
-    const user = await User.findOne({email: req.body.email})
-
-    if(!user) return res.status(400).json({success: false, message:'The user not found'});
-    else return res.status(200).json({success: true, user})
- 
+    try {
+        const user = await User.findOne({email: req.body.email})
+        console.log('hnhjknhjknjk', user);
+        
+        if(!user) return res.status(400).json({success: false, message:'The user not found'});
+        else return res.status(200).json({success: true, user})
+        
+    } catch (error) {
+        return res.status(404).json({success: true, error})
+    }
+   
 })
 
 
