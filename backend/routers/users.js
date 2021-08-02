@@ -60,10 +60,15 @@ router.post('/', async (req, res)=>{
 router.post('/login', async (req, res)=>{
     try {
         const user = await User.findOne({email: req.body.email})
-        console.log('hnhjknhjknjk', user);
-        
+    
         if(!user) return res.status(400).json({success: false, message:'The user not found'});
-        else return res.status(200).json({success: true, user})
+
+        if(user && bcrypy.compareSync(req.body.password, user.passwordHash)){
+            return res.status(200).json({success: true, user})
+        }else{
+            if(user)  return res.status(400).json({success: false, message:'Wrong password'});
+        }
+        
         
     } catch (error) {
         return res.status(404).json({success: true, error})
