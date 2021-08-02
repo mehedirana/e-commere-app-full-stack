@@ -2,12 +2,13 @@ const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const bcrypy = require('bcryptjs');
+const jwt = require('jsonwebtoken')
 
-router.get('/', async (req,res)=>{
+router.get('/', async (req, res) => {
     const userList = await User.find();
 
-    if(!userList){
-        res.status(500).json({success: false})
+    if (!userList) {
+        res.status(500).json({ success: false })
     }
     res.send(userList)
 })
@@ -15,7 +16,8 @@ router.get('/', async (req,res)=>{
 //for single user
 
 router.get('/:id', async (req, res) => {
-  
+
+
 
     User.findById(req.params.id).then(user => {
         if (user) {
@@ -29,7 +31,10 @@ router.get('/:id', async (req, res) => {
     })
 })
 
-router.post('/', async (req, res)=>{
+router.post('/', async (req, res) => {
+
+    const check = await User.findOne({ email: req.body.email })
+
 
     let user = new User({
         name: req.body.name,
@@ -42,38 +47,53 @@ router.post('/', async (req, res)=>{
         zip: req.body.apartment,
         city: req.body.apartment,
         country: req.body.country,
-        
+
     })
-    
+
     user = await user.save();
 
     try {
-        if(!user) return res.status(400).json({success: false, message: 'User can not create'})
-        else return res.status(200).json({success: true, user})
+            if(check) return res.status(400).json({ success: false, message: 'This email already registered ' })
+            if (!user) return res.status(400).json({ success: false, message: 'User can not create' })
+            else return res.status(200).json({ success: true, user })
+
     } catch (error) {
-        return res.status(400).json({success: false, error})
+        return res.status(400).json({ success: false, error })
     }
 })
 
 // user log in
 
-router.post('/login', async (req, res)=>{
+router.post('/login', async (req, res) => {
     try {
-        const user = await User.findOne({email: req.body.email})
-    
-        if(!user) return res.status(400).json({success: false, message:'The user not found'});
+        const user = await User.findOne({ email: req.body.email })
 
-        if(user && bcrypy.compareSync(req.body.password, user.passwordHash)){
-            return res.status(200).json({success: true, user})
-        }else{
-            if(user)  return res.status(400).json({success: false, message:'Wrong password'});
+        if (!user) return res.status(400).json({ success: false, message: 'The user not found' });
+
+        if (user && bcrypy.compareSync(req.body.password, user.passwordHash)) {
+
+            const token = jwt.sign({
+                userId: user.id
+            }, 'mehedi')
+
+            const user_info = {
+                name: user.name,
+                email: user.email,
+                isAdmin: user.isAdmin
+            }
+
+            return res.status(200).json({ success: true, token, user_info })
+
         }
-        
-        
+        else {
+            if (user) return res.status(400).json({ success: false, message: 'Wrong password' });
+        }
+
+
     } catch (error) {
-        return res.status(404).json({success: true, error})
+        return res.status(404).json({ success: true, error })
     }
-   
+
 })
 
 
