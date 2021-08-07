@@ -5,14 +5,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors')
 require("dotenv/config")
-
+const authJwt = require('./helpers/jwt');
 app.use(cors())
 app.options('*', cors( ))
 
 // middleware
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
-
+app.use(authJwt());
 //Routers
 const productsRoutes = require('./routers/products');
 const categoriesRoutes = require('./routers/categories');
