@@ -50,15 +50,22 @@ router.post('/', async (req, res) => {
 
     })
 
-    user = await user.save();
+    if (check) {
+        return res.status(400).json({ success: false, message: 'This email already registered ' })
+    }
+    else {
+        user = await user.save();
+    }
+
 
     try {
-            
-            if (!user) return res.status(400).json({ success: false, message: 'User can not create' })
-            else {
-                if(check) return res.status(400).json({ success: false, message: 'This email already registered ' })
-                else return res.status(200).json({ success: true, user })
-            } 
+
+        if (!user) return res.status(400).json({ success: false, message: 'User can not create' })
+        else {
+                // if(check) return res.status(400).json({ success: false, message: 'This email already registered ' })
+                // else
+                 return res.status(200).json({ success: true, user })
+        }
 
     } catch (error) {
         return res.status(400).json({ success: false, error })
