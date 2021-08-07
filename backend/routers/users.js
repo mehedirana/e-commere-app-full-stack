@@ -53,9 +53,12 @@ router.post('/', async (req, res) => {
     user = await user.save();
 
     try {
-            if(check) return res.status(400).json({ success: false, message: 'This email already registered ' })
+            
             if (!user) return res.status(400).json({ success: false, message: 'User can not create' })
-            else return res.status(200).json({ success: true, user })
+            else {
+                if(check) return res.status(400).json({ success: false, message: 'This email already registered ' })
+                else return res.status(200).json({ success: true, user })
+            } 
 
     } catch (error) {
         return res.status(400).json({ success: false, error })
@@ -98,3 +101,5 @@ router.post('/login', async (req, res) => {
 
 
 module.exports = router;
+
+// duplicate add houya atkaite hobe
