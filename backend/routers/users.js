@@ -77,14 +77,15 @@ router.post('/', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email })
-
+        const secret = process.env.secret;
         if (!user) return res.status(400).json({ success: false, message: 'The user not found' });
+
 
         if (user && bcrypy.compareSync(req.body.password, user.passwordHash)) {
 
             const token = jwt.sign({
                 userId: user.id
-            }, process.env.secret)
+            }, secret,{expiresIn:'1d'})
 
             const user_info = {
                 name: user.name,
