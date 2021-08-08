@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors')
 require("dotenv/config")
 const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handlers');
 app.use(cors())
 app.options('*', cors( ))
 
@@ -13,6 +14,7 @@ app.options('*', cors( ))
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
 app.use(authJwt());
+app.use(errorHandler)
 //Routers
 const productsRoutes = require('./routers/products');
 const categoriesRoutes = require('./routers/categories');
