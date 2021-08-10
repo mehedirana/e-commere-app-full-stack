@@ -31,7 +31,8 @@ router.get('/:id', async (req, res) => {
     })
 })
 
-router.post('/', async (req, res) => {
+//sign up
+router.post('/register', async (req, res) => {
 
     const check = await User.findOne({ email: req.body.email })
 
