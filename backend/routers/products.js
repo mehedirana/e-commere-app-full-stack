@@ -41,7 +41,7 @@ router.post(`/`, async (req, res) => {
     const category = await Category.findById(req.body.category)
     if (!category) return res.status(400).send('Invalid Category')
 
-    const product = new Product({
+    let product = new Product({
         name: req.body.name,
         description: req.body.description,
         richDescription: req.body.richDescription,
@@ -60,7 +60,7 @@ router.post(`/`, async (req, res) => {
         return res.status(500).json({ error: 'product can not be created', success: false })
     }
 
-    return res.send(product)
+    return res.status(500).json({success: true,product})
     // product.save().then((createdProduct => {
     //     res.status(201).json({ createdProduct, success: true })
     // })).catch((err) => {
