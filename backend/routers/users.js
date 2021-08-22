@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypy = require('bcryptjs');
 const jwt = require('jsonwebtoken')
-
+//all user
 router.get('/', async (req, res) => {
     const userList = await User.find();
 
@@ -14,7 +14,6 @@ router.get('/', async (req, res) => {
 })
 
 //for single user
-
 router.get('/:id', async (req, res) => {
 
 
@@ -74,7 +73,6 @@ router.post('/register', async (req, res) => {
 })
 
 // user log in
-
 router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email })
@@ -106,6 +104,38 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         return res.status(404).json({ success: true, error })
     }
+
+})
+
+// delete a user 
+router.delete('/:id', async (req, res)=>{
+    try {
+        const user = await User.findByIdAndRemove(req.params.id)
+        console.log('user..........', user);
+        if(user) return res.status(200).json({success: true, message: 'The user is deleted!'});
+        else return  res.status(404).json({success: false, message: 'user not found!'})
+    } catch (error) {
+        res.status(400).json({success: false, error: error})
+    }
+    
+
+})
+
+
+// totall user count
+
+router.get('/get/count', async (req, res)=>{
+    try {
+        const getCount = await User.countDocuments();
+
+        if(getCount) return res.status(200).json({success: true, totall: getCount})
+        else return res.status(404).json({success: false, message: 'user not found!' });
+    } catch (error) {
+       return res.status(400).json({success: false, error: error})
+    }
+    
+
+    
 
 })
 
